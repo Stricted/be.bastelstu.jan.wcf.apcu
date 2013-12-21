@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/eventListener.xsd">
+	<import>
+		<!-- admin -->
+		<eventlistener>
+			<eventclassname><![CDATA[wcf\acp\page\CacheListPage]]></eventclassname>
+			<eventname>assignVariables</eventname>
+			<environment>admin</environment>
+			<listenerclassname><![CDATA[wcf\system\event\listener\APCuListener]]></listenerclassname>
+		</eventlistener>
+		<!-- /admin -->
+	</import>
+</data>
