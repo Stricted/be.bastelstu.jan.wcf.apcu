@@ -4,12 +4,12 @@ use wcf\system\event\IEventListener;
 use wcf\system\WCF;
 
 /**
- * @author      Jan Altensen (Stricted)
- * @copyright   2012 Jan Altensen (Stricted)
+ * @author		Jan Altensen (Stricted)
+ * @copyright	2013 Jan Altensen (Stricted)
  * @license		GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package     de.stricted.wcf.apc
- * @subpackage  system.event.listener
- * @category    Community Framework
+ * @package		de.stricted.wcf.apc
+ * @subpackage	system.event.listener
+ * @category	Community Framework
  */
 class APCuUninstallListener implements IEventListener {
 	/**
