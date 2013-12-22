@@ -3,6 +3,7 @@ namespace wcf\system\event\listener;
 use wcf\system\event\IEventListener;
 use wcf\system\exception\SystemException;
 use wcf\system\Regex;
+use wcf\util\APCUtil;
 
 /**
  * @author      Jan Altensen (Stricted)
@@ -18,29 +19,27 @@ class APCuListener implements IEventListener {
 	 */
 	public function execute($eventObj, $className, $eventName) {
 		if ($eventObj->cacheData['source'] == 'wcf\system\cache\source\ApcuCacheSource') {
+			$apc = new APCUtil();
 			// set version
-			$eventObj->cacheData['version'] = phpversion('apcu');
+			$eventObj->cacheData['version'] = $apc->version;
 			
-			$apcuinfo = apcu_cache_info('user');
-			$cacheList = $apcuinfo['cache_list'];
-			usort($cacheList, function ($a, $b) {
-				return $a['key'] > $b['key'];
-			});
+			$cacheList = $apc->cache_info('user');
 			
 			$prefix = new Regex('^WCF_'.substr(sha1(WCF_DIR), 0, 10) . '_');
+			$data = array();
 			foreach ($cacheList as $cache) {
-				if (!$prefix->match($cache['key'])) continue;
+				if (!$prefix->match($cache['info'])) continue;
 				
 				// get additional cache information
-				$eventObj->caches['data']['apcu'][] = array(
-					'filename' => $prefix->replace($cache['key'], ''),
+				$data['data']['apcu'][] = array(
+					'filename' => $prefix->replace($cache['info'], ''),
 					'filesize' => $cache['mem_size'],
 					'mtime' => $cache['mtime']
 				);
-				
 				$eventObj->cacheData['files']++;
 				$eventObj->cacheData['size'] += $cache['mem_size'];
 			}
+			$eventObj->caches = array_merge($data, $eventObj->caches);
 		}
 	}
 }
