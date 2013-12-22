@@ -8,6 +8,12 @@
 			<environment>admin</environment>
 			<listenerclassname><![CDATA[wcf\system\event\listener\APCuListener]]></listenerclassname>
 		</eventlistener>
+		<eventlistener>
+			<eventclassname><![CDATA[wcf\acp\action\UninstallPackageAction]]></eventclassname>
+			<eventname>readParameters</eventname>
+			<environment>admin</environment>
+			<listenerclassname><![CDATA[wcf\system\event\listener\APCuUninstallListener]]></listenerclassname>
+		</eventlistener>
 		<!-- /admin -->
 	</import>
 </data>
