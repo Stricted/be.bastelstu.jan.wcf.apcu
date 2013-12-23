@@ -26,6 +26,7 @@ class APCuListener implements IEventListener {
 			
 			$prefix = new Regex('^WCF_'.substr(sha1(WCF_DIR), 0, 10) . '_');
 			$data = array();
+			$eventObj->cacheData['apcusize'] = 0;
 			foreach ($cacheList as $cache) {
 				if (!$prefix->match($cache['info'])) continue;
 				
@@ -37,6 +38,7 @@ class APCuListener implements IEventListener {
 				);
 				$eventObj->cacheData['files']++;
 				$eventObj->cacheData['size'] += $cache['mem_size'];
+				$eventObj->cacheData['apcusize'] += $cache['mem_size'];
 			}
 			$eventObj->caches = array_merge($data, $eventObj->caches);
 		}

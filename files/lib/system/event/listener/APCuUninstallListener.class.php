@@ -51,6 +51,9 @@ no:!cache_source_memcached_host'
 				'apcu'
 			));
 			
+			// rebuild options.inc.php
+			OptionEditor::resetCache();
+			OptionEditor::rebuild();
 			// clear cache
 			CacheHandler::getInstance()->flushAll();
 		}
