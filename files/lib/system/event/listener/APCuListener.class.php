@@ -9,8 +9,7 @@ use wcf\util\APCUtil;
  * @author		Jan Altensen (Stricted)
  * @copyright	2013 Jan Altensen (Stricted)
  * @license		GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package		de.stricted.wcf.apc
- * @subpackage	system.event.listener
+ * @package		be.bastelstu.jan.wcf.apcu
  * @category	Community Framework
  */
 class APCuListener implements IEventListener {

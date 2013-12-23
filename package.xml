@@ -4,7 +4,7 @@
 		<packagename>Alternative PHP Cache (APCu)</packagename>
 		<packagedescription></packagedescription>
 		<version>1.0.1</version>
-		<date>2013-12-21</date>
+		<date>2013-12-23</date>
 		<license><![CDATA[GNU LGPL <https://www.gnu.org/licenses/lgpl.html>]]></license>
 	</packageinformation>
 	

@@ -7,7 +7,6 @@ use wcf\system\exception\SystemException;
  * @copyright	2013 Jan Altensen (Stricted)
  * @license		GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  * @package		be.bastelstu.jan.wcf.apcu
- * @subpackage	util
  * @category	Community Framework
  */
 class APCUtil {
