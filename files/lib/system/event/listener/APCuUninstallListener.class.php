@@ -27,18 +27,6 @@ class APCuUninstallListener implements IEventListener {
 		$statement->execute(array(":package" => "be.bastelstu.jan.wcf.apcu"));
 		$row = $statement->fetchArray();
 		if ($packageID && $packageID == $row['packageID']) {
-			// restore default cachesource options
-			$sql = "UPDATE wcf".WCF_N."_option SET 
-	selectOptions = 'disk:wcf.acp.option.cache_source_type.disk
-memcached:wcf.acp.option.cache_source_type.memcached
-no:wcf.acp.option.cache_source_type.no',
-	enableOptions = 'disk:!cache_source_memcached_host
-memcached:cache_source_memcached_host
-no:!cache_source_memcached_host' 
-	WHERE optionName = 'cache_source_type';";
-			
-			$statement = WCF::getDB()->prepareStatement($sql);
-			$statement->execute();
 			// set cache to disk if apc(u) is enabled
 			$sql = "UPDATE	wcf".WCF_N."_option
 				SET	optionValue = ?

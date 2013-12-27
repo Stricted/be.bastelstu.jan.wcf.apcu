@@ -14,6 +14,12 @@
 			<environment>admin</environment>
 			<listenerclassname><![CDATA[wcf\system\event\listener\APCuUninstallListener]]></listenerclassname>
 		</eventlistener>
+		<eventlistener>
+			<eventclassname><![CDATA[wcf\system\option\OptionHandler]]></eventclassname>
+			<eventname>afterReadCache</eventname>
+			<listenerclassname><![CDATA[wcf\system\event\listener\APCuOptionListener]]></listenerclassname>
+			<environment>admin</environment>
+		</eventlistener>
 		<!-- /admin -->
 	</import>
 </data>

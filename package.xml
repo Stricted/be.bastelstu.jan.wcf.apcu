@@ -20,7 +20,6 @@
 	<instructions type="install">
 		<instruction type="file">files.tar</instruction>
 		<instruction type="acpTemplate">acptemplates.tar</instruction>
-		<instruction type="sql">install.sql</instruction>
 		<instruction type="eventListener">eventlistener.xml</instruction>
 		<instruction type="templateListener">templatelistener.xml</instruction>
 		<instruction type="language">language/*.xml</instruction>
@@ -30,7 +29,6 @@
 	<instructions type="update" fromversion="1.0.0">
 		<instruction type="file">files.tar</instruction>
 		<instruction type="acpTemplate">acptemplates.tar</instruction>
-		<instruction type="sql">install.sql</instruction>
 		<instruction type="eventListener">eventlistener.xml</instruction>
 		<instruction type="templateListener">templatelistener.xml</instruction>
 		<instruction type="language">language/*.xml</instruction>

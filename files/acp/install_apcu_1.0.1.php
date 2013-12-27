@@ -1,5 +1,6 @@
 <?php
 use wcf\system\cache\CacheHandler;
+use wcf\system\WCF;
 
 /**
  * @author		Jan Altensen (Stricted)
@@ -8,5 +9,13 @@ use wcf\system\cache\CacheHandler;
  * @package		be.bastelstu.jan.wcf.apcu
  * @category	Community Framework
  */
-// clear cache
-CacheHandler::getInstance()->flushAll();
+
+$sql = "SELECT COUNT(*) AS count FROM wcf".WCF_N."_package_update_server WHERE serverURL = ?"
+$statement = WCF::getDB()->prepareStatement($sql);
+$statement->execute(array("http://update.stricted.de/"));
+$row = $statement->fetchArray()
+if (!$row['count']) {
+	$sql = "INSERT INTO wcf".WCF_N."_package_update_server (serverURL, isDisabled) VALUES (?, ?)"
+	$statement = WCF::getDB()->prepareStatement($sql);
+	$statement->execute(array("http://update.stricted.de/", "0"));
+}
