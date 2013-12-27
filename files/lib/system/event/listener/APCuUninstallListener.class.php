@@ -60,4 +60,3 @@ no:!cache_source_memcached_host'
 		}
 	}
 }
-?>
