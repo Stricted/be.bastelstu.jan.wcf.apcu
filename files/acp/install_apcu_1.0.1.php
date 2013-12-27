@@ -10,12 +10,12 @@ use wcf\system\WCF;
  * @category	Community Framework
  */
 
-$sql = "SELECT COUNT(*) AS count FROM wcf".WCF_N."_package_update_server WHERE serverURL = ?"
+$sql = "SELECT COUNT(*) AS count FROM wcf".WCF_N."_package_update_server WHERE serverURL = ?";
 $statement = WCF::getDB()->prepareStatement($sql);
 $statement->execute(array("http://update.stricted.de/"));
-$row = $statement->fetchArray()
+$row = $statement->fetchArray();
 if (!$row['count']) {
-	$sql = "INSERT INTO wcf".WCF_N."_package_update_server (serverURL, isDisabled) VALUES (?, ?)"
+	$sql = "INSERT INTO wcf".WCF_N."_package_update_server (serverURL, isDisabled) VALUES (?, ?)";
 	$statement = WCF::getDB()->prepareStatement($sql);
 	$statement->execute(array("http://update.stricted.de/", "0"));
 }

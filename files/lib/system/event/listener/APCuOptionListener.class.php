@@ -9,7 +9,7 @@ use wcf\system\event\IEventListener;
  * @package		be.bastelstu.jan.wcf.apcu
  * @category	Community Framework
  */
-class APCuListener implements IEventListener {
+class APCuOptionListener implements IEventListener {
 	/**
 	 * @see \wcf\system\event\IEventListener::execute()
 	 */
