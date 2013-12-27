@@ -1,9 +1,9 @@
 <?php
 namespace wcf\system\event\listener;
+use wcf\system\cache\CacheHandler;
+use wcf\data\option\OptionEditor;
 use wcf\system\event\IEventListener;
 use wcf\system\WCF;
-use wcf\data\option\OptionEditor;
-use wcf\system\cache\CacheHandler;
 
 /**
  * @author		Jan Altensen (Stricted)
