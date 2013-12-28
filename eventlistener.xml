@@ -12,12 +12,12 @@
 			<eventclassname><![CDATA[wcf\acp\action\UninstallPackageAction]]></eventclassname>
 			<eventname>readParameters</eventname>
 			<environment>admin</environment>
-			<listenerclassname><![CDATA[wcf\system\event\listener\APCuUninstallListener]]></listenerclassname>
+			<listenerclassname><![CDATA[wcf\system\event\listener\APCuListener]]></listenerclassname>
 		</eventlistener>
 		<eventlistener>
 			<eventclassname><![CDATA[wcf\system\option\OptionHandler]]></eventclassname>
 			<eventname>afterReadCache</eventname>
-			<listenerclassname><![CDATA[wcf\system\event\listener\APCuOptionListener]]></listenerclassname>
+			<listenerclassname><![CDATA[wcf\system\event\listener\APCuListener]]></listenerclassname>
 			<environment>admin</environment>
 		</eventlistener>
 		<!-- /admin -->

@@ -3,6 +3,6 @@
 	<category name="wcf.acp">
 		<item name="wcf.acp.cache.source.type.ApcuCacheSource"><![CDATA[Alternative PHP Cache]]></item>
 		<item name="wcf.acp.option.cache_source_type.apcu"><![CDATA[Alternative PHP Cache]]></item>
-		<item name="wcf.acp.cache.data.apcusize"><![CDATA[APC(u) Größe]]></item>
+		<item name="wcf.acp.cache.data.apcusize"><![CDATA[APC(u)]]></item>
 	</category>
 </language>

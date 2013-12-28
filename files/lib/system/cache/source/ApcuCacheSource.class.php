@@ -7,12 +7,12 @@ use wcf\util\StringUtil;
 
 /**
  * ApcuCacheSource is an implementation of CacheSource that uses APC(u) to store cached variables.
- * 
- * @author		Jan Altensen (Stricted)
- * @copyright	2013 Jan Altensen (Stricted)
- * @license		GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package		be.bastelstu.jan.wcf.apcu
- * @category	Community Framework
+ *
+ * @author      Jan Altensen (Stricted)
+ * @copyright   2013 Jan Altensen (Stricted)
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @package     be.bastelstu.jan.wcf.apcu
+ * @category    Community Framework
  */
 class ApcuCacheSource implements ICacheSource {
 	/**

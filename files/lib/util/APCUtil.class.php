@@ -3,11 +3,11 @@ namespace wcf\util;
 use wcf\system\exception\SystemException;
 
 /**
- * @author		Jan Altensen (Stricted)
- * @copyright	2013 Jan Altensen (Stricted)
- * @license		GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
- * @package		be.bastelstu.jan.wcf.apcu
- * @category	Community Framework
+ * @author      Jan Altensen (Stricted)
+ * @copyright   2013 Jan Altensen (Stricted)
+ * @license     GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
+ * @package     be.bastelstu.jan.wcf.apcu
+ * @category    Community Framework
  */
 class APCUtil {
 	/**
