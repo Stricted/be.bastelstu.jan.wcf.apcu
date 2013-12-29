@@ -9,29 +9,29 @@ use wcf\system\exception\SystemException;
  * @package     be.bastelstu.jan.wcf.apcu
  * @category    Community Framework
  */
-class APCUtil {
+class APC {
 	/**
 	 * php extension
 	 * @var	string
 	 */
-	protected $extension = "";
+	protected static $extension = "";
 	
 	/**
 	 * APC(u) version
 	 * @var integer
 	 */
-	public $version = 0;
+	public static $version = 0;
 	
 	/**
-	 * Creates a new APCUtil object.
+	 * Creates a new APC object.
 	 */
-	public function __construct () {
+	public static function construct () {
 		if (extension_loaded("apcu")) {
-			$this->extension = "apcu";
-			$this->version = phpversion('apcu');
+			self::$extension = "apcu";
+			self::$version = phpversion('apcu');
 		} else if (extension_loaded("apc")) {
-			$this->extension = "apc";
-			$this->version = phpversion('apc');
+			self::$extension = "apc";
+			self::$version = phpversion('apc');
 		} else
 			throw new SystemException('APC support is not enabled.');
 	}
@@ -42,11 +42,11 @@ class APCUtil {
 	 * @param	string	$key
 	 * @return	boolean
 	 */
-	public function delete ($key) {
-		if ($this->extension == "apcu")
+	public static function delete ($key) {
+		if (self::$extension == "apcu")
 			return apcu_delete($key);
-		else
-			return apc_delete($key);
+
+		return apc_delete($key);
 	}
 	
 	/**
@@ -55,11 +55,11 @@ class APCUtil {
 	 * @param	string	$key
 	 * @return	string
 	 */
-	public function fetch ($key) {
-		if ($this->extension == "apcu")
+	public static function fetch ($key) {
+		if (self::$extension == "apcu")
 			return apcu_fetch($key);
-		else
-			return apc_fetch($key);
+		
+		return apc_fetch($key);
 	}
 	
 	/**
@@ -70,12 +70,26 @@ class APCUtil {
 	 * @param	integer	$ttl
 	 * @return	boolean
 	 */
-	public function store ($key, $var, $ttl) {
-		if ($this->extension == "apcu")
+	public static function store ($key, $var, $ttl) {
+		if (self::$extension == "apcu")
 			return apcu_store($key, $var, $ttl);
-		else
-			return apc_store($key, $var, $ttl);
+		
+		return apc_store($key, $var, $ttl);
 	}
+	
+	/**
+	 * clear cache
+	 *
+	 * @param	string	$key
+	 * @return	boolean
+	 */
+	public static function clear_cache ($key = "user") {
+		if (self::$extension == "apcu")
+			return apcu_clear_cache($key);
+		
+		return apc_clear_cache($key);
+	}
+	
 	
 	/**
 	 * get cache items
@@ -83,9 +97,9 @@ class APCUtil {
 	 * @param	string	$key
 	 * @return	array
 	 */
-	public function cache_info ($key = "user") {
+	public static function cache_info ($key = "user") {
 		$info = array();
-		if ($this->extension == "apcu") {
+		if (self::$extension == "apcu") {
 			$apcinfo = apcu_cache_info($key);
 			$cacheList = $apcinfo['cache_list'];
 			

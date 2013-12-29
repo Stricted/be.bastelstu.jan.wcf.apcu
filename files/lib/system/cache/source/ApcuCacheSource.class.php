@@ -2,7 +2,7 @@
 namespace wcf\system\cache\source;
 use wcf\system\exception\SystemException;
 use wcf\system\Regex;
-use wcf\util\APCUtil;
+use wcf\util\APC;
 use wcf\util\StringUtil;
 
 /**
@@ -22,17 +22,10 @@ class ApcuCacheSource implements ICacheSource {
 	protected $prefix = '';
 	
 	/**
-	 * APC object
-	 * @var object
-	 */
-	protected $apc = null;
-	
-	/**
 	 * Creates a new ApcCacheSource object.
 	 */
 	public function __construct() {
-		// store apc object
-		$this->apc = new APCUtil();
+		APC::construct();
 		
 		// set variable prefix to prevent collision
 		$this->prefix = 'WCF_'.substr(sha1(WCF_DIR), 0, 10) . '_';
@@ -46,7 +39,7 @@ class ApcuCacheSource implements ICacheSource {
 			$this->removeKeys($this->prefix . $cacheName . '(\-[a-f0-9]+)?');
 		}
 		else {
-			$this->apc->elete($this->prefix . $cacheName);
+			APC::delete($this->prefix . $cacheName);
 		}
 	}
 	
@@ -54,14 +47,14 @@ class ApcuCacheSource implements ICacheSource {
 	 * @see	\wcf\system\cache\source\ICacheSource::flushAll()
 	 */
 	public function flushAll() {
-		$this->removeKeys();
+		APC::clear_cache();
 	}
 	
 	/**
 	 * @see	\wcf\system\cache\source\ICacheSource::get()
 	 */
 	public function get($cacheName, $maxLifetime) {
-		if (($data = $this->apc->fetch($this->prefix . $cacheName)) === false) {
+		if (($data = APC::fetch($this->prefix . $cacheName)) === false) {
 			return null;
 		}
 		
@@ -72,7 +65,7 @@ class ApcuCacheSource implements ICacheSource {
 	 * @see	\wcf\system\cache\source\ICacheSource::set()
 	 */
 	public function set($cacheName, $value, $maxLifetime) {
-		$this->apc->store($this->prefix . $cacheName, $value, $this->getTTL($maxLifetime));
+		APC::store($this->prefix . $cacheName, $value, $this->getTTL($maxLifetime));
 	}
 	
 	/**
@@ -100,20 +93,12 @@ class ApcuCacheSource implements ICacheSource {
 	/**
 	 * @see	\wcf\system\cache\source\ICacheSource::clear()
 	 */
-	public function removeKeys($pattern = null) {
-		$regex = null;
-		if ($pattern !== null) {
-			$regex = new Regex('^'.$pattern.'$');
-		}
+	public function removeKeys($pattern) {
+		$regex = new Regex('^'.$pattern.'$');
 		
-		$apcuCacheInfo = $this->apc->cache_info('user');
+		$apcuCacheInfo = APC::cache_info('user');
 		foreach ($apcuCacheInfo as $cache) {
-			if ($regex === null) {
-				if (StringUtil::startsWith($cache['info'], $this->prefix)) {
-					$this->apc->delete($cache['info']);
-				}
-			}
-			else if ($regex->match($cache['info'])) {
+			if ($regex->match($cache['info'])) {
 				$this->apc->delete($cache['info']);
 			}
 		}

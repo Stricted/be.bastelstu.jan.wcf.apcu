@@ -6,7 +6,7 @@
 			<environment>admin</environment>
 			<templatename>cacheList</templatename>
 			<eventname>dataFields</eventname>
-			<templatecode><![CDATA[{include file='__apcusize'}]]></templatecode>
+			<templatecode><![CDATA[{include file='__apcu'}]]></templatecode>
 		</templatelistener>
 	</import>
 </data>
