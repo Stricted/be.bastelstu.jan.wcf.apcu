@@ -99,7 +99,7 @@ class APC {
 	 */
 	public static function cache_info ($key = "user") {
 		$info = array();
-		if (self::$extension == "apcu") {
+		if (self::$extension == "apcu" && version_compare(self::$version, '4.0.3', '<')) {
 			$apcinfo = apcu_cache_info($key);
 			$cacheList = $apcinfo['cache_list'];
 			
@@ -112,8 +112,10 @@ class APC {
 				$apcu['info'] = $cache['key'];
 				$info[] = $apcu;
 			}
-		} else {
-			$apcinfo = apc_cache_info($key);
+		}
+		else {
+			$cache_info = self::$extension."_cache_info";
+			$apcinfo = $cache_info($key);
 			$cacheList = $apcinfo['cache_list'];
 			
 			usort($cacheList, function ($a, $b) {
