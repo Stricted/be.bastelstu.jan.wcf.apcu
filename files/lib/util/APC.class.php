@@ -32,8 +32,13 @@ class APC {
 		} else if (extension_loaded("apc")) {
 			self::$extension = "apc";
 			self::$version = phpversion('apc');
-		} else
+		} else {
 			throw new SystemException('APC support is not enabled.');
+		}
+		
+		if (self::$extension == "apcu" && version_compare(self::$version, '4.0.1', '=') {
+			throw new SystemException('APCu 4.0.1 is not supported.');
+		}
 	}
 	
 	/**
@@ -43,10 +48,8 @@ class APC {
 	 * @return	boolean
 	 */
 	public static function delete ($key) {
-		if (self::$extension == "apcu")
-			return apcu_delete($key);
-
-		return apc_delete($key);
+		$delete = self::$extension."_delete";
+		return $delete($key);
 	}
 	
 	/**
@@ -56,10 +59,8 @@ class APC {
 	 * @return	string
 	 */
 	public static function fetch ($key) {
-		if (self::$extension == "apcu")
-			return apcu_fetch($key);
-		
-		return apc_fetch($key);
+		$fetch = self::$extension."_fetch";
+		return $fetch($key);
 	}
 	
 	/**
@@ -71,10 +72,8 @@ class APC {
 	 * @return	boolean
 	 */
 	public static function store ($key, $var, $ttl) {
-		if (self::$extension == "apcu")
-			return apcu_store($key, $var, $ttl);
-		
-		return apc_store($key, $var, $ttl);
+		$store = self::$extension."_store";
+		return $store($key, $var, $ttl);
 	}
 	
 	/**
@@ -84,10 +83,8 @@ class APC {
 	 * @return	boolean
 	 */
 	public static function clear_cache ($key = "user") {
-		if (self::$extension == "apcu")
-			return apcu_clear_cache($key);
-		
-		return apc_clear_cache($key);
+		$clear_cache = self::$extension."_clear_cache";
+		return $clear_cache($key);
 	}
 	
 	
@@ -99,38 +96,40 @@ class APC {
 	 */
 	public static function cache_info ($key = "user") {
 		$info = array();
-		if (self::$extension == "apcu" && version_compare(self::$version, '4.0.3', '<')) {
-			$apcinfo = apcu_cache_info($key);
-			if (isset($apcinfo['cache_list'])) {
-				$cacheList = $apcinfo['cache_list'];
-				
-				usort($cacheList, function ($a, $b) {
-					return $a['key'] > $b['key'];
-				});
-				
-				foreach ($cacheList as $cache) {
+		$cache_info = self::$extension."_cache_info";
+		$apcinfo = $cache_info($key);
+		
+		if (isset($apcinfo['cache_list'])) {
+			$cacheList = $apcinfo['cache_list'];
+			
+			usort($cacheList, array("self", "usort"));
+			
+			foreach ($cacheList as $cache) {
+				if (self::$extension == "apcu" && version_compare(self::$version, '4.0.3', '<')) {
 					$apcu = $cache;
 					$apcu['info'] = $cache['key'];
 					$info[] = $apcu;
-				}
-			}
-		}
-		else {
-			$cache_info = self::$extension."_cache_info";
-			$apcinfo = $cache_info($key);
-			if (isset($apcinfo['cache_list'])) {
-				$cacheList = $apcinfo['cache_list'];
-				
-				usort($cacheList, function ($a, $b) {
-					return $a['info'] > $b['info'];
-				});
-				
-				foreach ($cacheList as $cache) {
+				} else {
 					$info[] = $cache;
 				}
 			}
 		}
 		
 		return $info;
+	}
+	
+	/**
+	 * sort the given data
+	 *
+	 * @param	array	$a
+	 * @param	array	$b
+	 * @raturn	array
+	 */
+	protected static function usort ($a, $b) {
+		if (self::$extension == "apcu") {
+			return $a['key'] > $b['key'];
+		} else {
+			return $a['info'] > $b['info'];
+		}
 	}
 }
