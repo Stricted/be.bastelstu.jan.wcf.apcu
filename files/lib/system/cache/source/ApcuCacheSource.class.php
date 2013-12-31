@@ -25,7 +25,7 @@ class ApcuCacheSource implements ICacheSource {
 	 * Creates a new ApcCacheSource object.
 	 */
 	public function __construct() {
-		APC::construct();
+		APC::init();
 		
 		// set variable prefix to prevent collision
 		$this->prefix = 'WCF_'.substr(sha1(WCF_DIR), 0, 10) . '_';

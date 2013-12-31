@@ -21,7 +21,7 @@ class APCuListener implements IEventListener {
 		switch ($className) {
 			case "wcf\acp\page\CacheListPage":
 				if ($eventObj->cacheData['source'] == 'wcf\system\cache\source\ApcuCacheSource') {
-					APC::construct();
+					APC::init();
 					
 					// set version
 					$eventObj->cacheData['version'] = APC::$version;
@@ -56,27 +56,29 @@ class APCuListener implements IEventListener {
 				break;
 			
 			case "wcf\acp\action\UninstallPackageAction":
-				if(isset($_POST['packageID']) && !empty($_POST['packageID']))
+				if (isset($_POST['packageID']) && !empty($_POST['packageID'])) {
 					$packageID = intval($_POST['packageID']);
-				else
+				} else {
 					$packageID = 0;
-				
-				$sql = "SELECT * FROM wcf".WCF_N."_package where package = :package LIMIT 1";
-				$statement = WCF::getDB()->prepareStatement($sql);
-				$statement->execute(array(":package" => "be.bastelstu.jan.wcf.apcu"));
-				$row = $statement->fetchArray();
-				if ($packageID && $packageID == $row['packageID']) {
-					// set cache to disk if apc(u) is enabled
-					$sql = "UPDATE	wcf".WCF_N."_option
-						SET	optionValue = ?
-						WHERE	optionName = ?
-							AND optionValue = ?";
+				}
+				if ($packageID) {
+					$sql = "SELECT * FROM wcf".WCF_N."_package where package = ? LIMIT 1";
 					$statement = WCF::getDB()->prepareStatement($sql);
-					$statement->execute(array(
-						'disk',
-						'cache_source_type',
-						'apcu'
-					));
+					$statement->execute(array("be.bastelstu.jan.wcf.apcu"));
+					$row = $statement->fetchArray();
+					if ($packageID == $row['packageID']) {
+						// set cache to disk if apc(u) is enabled
+						$sql = "UPDATE	wcf".WCF_N."_option
+							SET	optionValue = ?
+							WHERE	optionName = ?
+								AND optionValue = ?";
+						$statement = WCF::getDB()->prepareStatement($sql);
+						$statement->execute(array(
+							'disk',
+							'cache_source_type',
+							'apcu'
+						));
+					}
 				}
 				break;
 		}

@@ -23,9 +23,9 @@ class APC {
 	public static $version = 0;
 	
 	/**
-	 * Creates a new APC object.
+	 * init APC class
 	 */
-	public static function construct () {
+	public static function init () {
 		if (extension_loaded("apcu")) {
 			self::$extension = "apcu";
 			self::$version = phpversion('apcu');
