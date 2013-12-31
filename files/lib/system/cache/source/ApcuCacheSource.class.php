@@ -99,7 +99,7 @@ class ApcuCacheSource implements ICacheSource {
 		$apcuCacheInfo = APC::cache_info('user');
 		foreach ($apcuCacheInfo as $cache) {
 			if ($regex->match($cache['info'])) {
-				$this->apc->delete($cache['info']);
+				APC::delete($cache['info']);
 			}
 		}
 	}
