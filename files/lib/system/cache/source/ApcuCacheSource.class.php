@@ -32,11 +32,21 @@ class ApcuCacheSource implements ICacheSource {
 	}
 	
 	/**
-	 * @see	\wcf\system\cache\source\ICacheSource::flush()
+	 * Flushes a specific cache, optionally removing caches which share the same name.
+	 * 
+	 * @param	string		$cacheName
+	 * @param	boolean		$useWildcard
 	 */
 	public function flush($cacheName, $useWildcard) {
 		if ($useWildcard) {
-			$this->removeKeys($this->prefix . $cacheName . '(\-[a-f0-9]+)?');
+			$regex = new Regex('^'.$this->prefix . $cacheName . '(\-[a-f0-9]+)?'.'$');
+			
+			$apcuCacheInfo = APC::cache_info();
+			foreach ($apcuCacheInfo as $cache) {
+				if ($regex->match($cache['info'])) {
+					APC::delete($cache['info']);
+				}
+			}
 		}
 		else {
 			APC::delete($this->prefix . $cacheName);
@@ -44,14 +54,18 @@ class ApcuCacheSource implements ICacheSource {
 	}
 	
 	/**
-	 * @see	\wcf\system\cache\source\ICacheSource::flushAll()
+	 * Clears the cache completely.
 	 */
 	public function flushAll() {
 		APC::clear_cache();
 	}
 	
 	/**
-	 * @see	\wcf\system\cache\source\ICacheSource::get()
+	 * Returns a cached variable.
+	 * 
+	 * @param	string		$cacheName
+	 * @param	integer		$maxLifetime
+	 * @return	mixed
 	 */
 	public function get($cacheName, $maxLifetime) {
 		if (($data = APC::fetch($this->prefix . $cacheName)) === false) {
@@ -62,7 +76,11 @@ class ApcuCacheSource implements ICacheSource {
 	}
 	
 	/**
-	 * @see	\wcf\system\cache\source\ICacheSource::set()
+	 * Stores a variable in the cache.
+	 * 
+	 * @param	string		$cacheName
+	 * @param	mixed		$value
+	 * @param	integer		$maxLifetime
 	 */
 	public function set($cacheName, $value, $maxLifetime) {
 		APC::store($this->prefix . $cacheName, $value, $this->getTTL($maxLifetime));
@@ -88,19 +106,5 @@ class ApcuCacheSource implements ICacheSource {
 		
 		// default TTL: 3 days
 		return (60 * 60 * 24 * 3);
-	}
-	
-	/**
-	 * @see	\wcf\system\cache\source\ICacheSource::clear()
-	 */
-	public function removeKeys($pattern) {
-		$regex = new Regex('^'.$pattern.'$');
-		
-		$apcuCacheInfo = APC::cache_info('user');
-		foreach ($apcuCacheInfo as $cache) {
-			if ($regex->match($cache['info'])) {
-				APC::delete($cache['info']);
-			}
-		}
 	}
 }

@@ -123,7 +123,7 @@ class APC {
 	 *
 	 * @param	array	$a
 	 * @param	array	$b
-	 * @raturn	array
+	 * @return	array
 	 */
 	protected static function usort ($a, $b) {
 		if (self::$extension == "apcu") {

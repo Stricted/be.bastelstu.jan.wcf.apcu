@@ -26,7 +26,7 @@ class APCuListener implements IEventListener {
 					// set version
 					$eventObj->cacheData['version'] = APC::$version;
 					
-					$cacheList = APC::cache_info('user');
+					$cacheList = APC::cache_info();
 					
 					$prefix = new Regex('^WCF_'.substr(sha1(WCF_DIR), 0, 10) . '_');
 					$data = array();
@@ -51,7 +51,7 @@ class APCuListener implements IEventListener {
 			case "wcf\system\option\OptionHandler":
 				$eventObj->cachedOptions['cache_source_type']->modifySelectOptions($eventObj->cachedOptions['cache_source_type']->selectOptions . "\napcu:wcf.acp.option.cache_source_type.apcu");
 				
-				/* dirty but i wait for pull request https://github.com/WoltLab/WCF/pull/1630 */
+				/* dirty but i need wait for pull request https://github.com/WoltLab/WCF/pull/1630 */
 				$eventObj->cachedOptions['cache_source_type']->enableOptions = $eventObj->cachedOptions['cache_source_type']->enableOptions . "\napcu:!cache_source_memcached_host";
 				break;
 			
@@ -61,6 +61,7 @@ class APCuListener implements IEventListener {
 				} else {
 					$packageID = 0;
 				}
+				
 				if ($packageID) {
 					$sql = "SELECT * FROM wcf".WCF_N."_package where package = ? LIMIT 1";
 					$statement = WCF::getDB()->prepareStatement($sql);
