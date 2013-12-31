@@ -51,10 +51,8 @@ class APCuListener implements IEventListener {
 			case "wcf\system\option\OptionHandler":
 				$eventObj->cachedOptions['cache_source_type']->modifySelectOptions($eventObj->cachedOptions['cache_source_type']->selectOptions . "\napcu:wcf.acp.option.cache_source_type.apcu");
 				
-				/*
-				wait for pull request https://github.com/WoltLab/WCF/pull/1630
-				$eventObj->cachedOptions['cache_source_type']->modifyEnableOptions($eventObj->cachedOptions['cache_source_type']->enableOptions . "\napcu:!cache_source_memcached_host");
-				*/
+				/* dirty but i wait for pull request https://github.com/WoltLab/WCF/pull/1630 */
+				$eventObj->cachedOptions['cache_source_type']->enableOptions = $eventObj->cachedOptions['cache_source_type']->enableOptions . "\napcu:!cache_source_memcached_host";
 				break;
 			
 			case "wcf\acp\action\UninstallPackageAction":

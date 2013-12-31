@@ -4,7 +4,7 @@
 		<packagename>Alternative PHP Cache (APCu)</packagename>
 		<packagedescription></packagedescription>
 		<version>1.0.2</version>
-		<date>2013-12-28</date>
+		<date>2013-12-31</date>
 		<license><![CDATA[GNU LGPL <https://www.gnu.org/licenses/lgpl.html>]]></license>
 	</packageinformation>
 	
@@ -23,15 +23,15 @@
 		<instruction type="eventListener">eventlistener.xml</instruction>
 		<instruction type="templateListener">templatelistener.xml</instruction>
 		<instruction type="language">language/*.xml</instruction>
-		<instruction type="script">acp/install_apcu_1.0.1.php</instruction>
+		<instruction type="script">acp/install_apcu_1.0.2.php</instruction>
 	</instructions>
 	
-	<instructions type="update" fromversion="1.0.1">
+	<instructions type="update" fromversion="1.0.1 pl 3">
 		<instruction type="file">files.tar</instruction>
 		<instruction type="acpTemplate">acptemplates.tar</instruction>
 		<instruction type="eventListener">eventlistener.xml</instruction>
 		<instruction type="templateListener">templatelistener.xml</instruction>
 		<instruction type="language">language/*.xml</instruction>
-		<instruction type="script">acp/install_apcu_1.0.1.php</instruction>
+		<instruction type="script">acp/install_apcu_1.0.2.php</instruction>
 	</instructions>
 </package>
