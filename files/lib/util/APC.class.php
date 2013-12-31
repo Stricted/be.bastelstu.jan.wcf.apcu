@@ -36,7 +36,7 @@ class APC {
 			throw new SystemException('APC support is not enabled.');
 		}
 		
-		if (self::$extension == "apcu" && version_compare(self::$version, '4.0.1', '=') {
+		if (self::$extension == "apcu" && version_compare(self::$version, '4.0.1', '=')) {
 			throw new SystemException('APCu 4.0.1 is not supported.');
 		}
 	}
