@@ -101,29 +101,33 @@ class APC {
 		$info = array();
 		if (self::$extension == "apcu" && version_compare(self::$version, '4.0.3', '<')) {
 			$apcinfo = apcu_cache_info($key);
-			$cacheList = $apcinfo['cache_list'];
-			
-			usort($cacheList, function ($a, $b) {
-				return $a['key'] > $b['key'];
-			});
-			
-			foreach ($cacheList as $cache) {
-				$apcu = $cache;
-				$apcu['info'] = $cache['key'];
-				$info[] = $apcu;
+			if (isset($apcinfo['cache_list'])) {
+				$cacheList = $apcinfo['cache_list'];
+				
+				usort($cacheList, function ($a, $b) {
+					return $a['key'] > $b['key'];
+				});
+				
+				foreach ($cacheList as $cache) {
+					$apcu = $cache;
+					$apcu['info'] = $cache['key'];
+					$info[] = $apcu;
+				}
 			}
 		}
 		else {
 			$cache_info = self::$extension."_cache_info";
 			$apcinfo = $cache_info($key);
-			$cacheList = $apcinfo['cache_list'];
-			
-			usort($cacheList, function ($a, $b) {
-				return $a['info'] > $b['info'];
-			});
-			
-			foreach ($cacheList as $cache) {
-				$info[] = $cache;
+			if (isset($apcinfo['cache_list'])) {
+				$cacheList = $apcinfo['cache_list'];
+				
+				usort($cacheList, function ($a, $b) {
+					return $a['info'] > $b['info'];
+				});
+				
+				foreach ($cacheList as $cache) {
+					$info[] = $cache;
+				}
 			}
 		}
 		
