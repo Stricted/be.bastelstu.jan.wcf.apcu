@@ -126,7 +126,7 @@ class APC {
 	 * @return	array
 	 */
 	protected static function usort ($a, $b) {
-		if (self::$extension == "apcu") {
+		if (self::$extension == "apcu" && version_compare(self::$version, '4.0.3', '<')) {
 			return $a['key'] > $b['key'];
 		} else {
 			return $a['info'] > $b['info'];
