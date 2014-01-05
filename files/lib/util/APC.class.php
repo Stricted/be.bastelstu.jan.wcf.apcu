@@ -73,18 +73,6 @@ class APC {
 	}
 	
 	/**
-	 * clear cache
-	 *
-	 * @param	string	$key
-	 * @return	boolean
-	 */
-	public static function clear_cache () {
-		$clear_cache = self::$extension."_clear_cache";
-		return $clear_cache();
-	}
-	
-	
-	/**
 	 * get cache items
 	 *
 	 * @param	string	$key

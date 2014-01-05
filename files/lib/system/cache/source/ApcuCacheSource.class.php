@@ -39,14 +39,7 @@ class ApcuCacheSource implements ICacheSource {
 	 */
 	public function flush($cacheName, $useWildcard) {
 		if ($useWildcard) {
-			$regex = new Regex('^'.$this->prefix . $cacheName . '(\-[a-f0-9]+)?'.'$');
-			
-			$apcuCacheInfo = APC::cache_info();
-			foreach ($apcuCacheInfo as $cache) {
-				if ($regex->match($cache['info'])) {
-					APC::delete($cache['info']);
-				}
-			}
+			$this->removeKeys($this->prefix . $cacheName . '(\-[a-f0-9]+)?');
 		}
 		else {
 			APC::delete($this->prefix . $cacheName);
@@ -57,7 +50,7 @@ class ApcuCacheSource implements ICacheSource {
 	 * Clears the cache completely.
 	 */
 	public function flushAll() {
-		APC::clear_cache();
+		$this->removeKeys();
 	}
 	
 	/**
@@ -106,5 +99,27 @@ class ApcuCacheSource implements ICacheSource {
 		
 		// default TTL: 3 days
 		return (60 * 60 * 24 * 3);
+	}
+	
+	/**
+	 * @see  \wcf\system\cache\source\ICacheSource::clear()
+	 */
+	public function removeKeys($pattern = null) {
+		$regex = null;
+		if ($pattern !== null) {
+			$regex = new Regex('^'.$pattern.'$');
+		}
+		
+		$apcCacheInfo = APC::cache_info();
+		foreach ($apcCacheInfo as $cache) {
+			if ($regex === null) {
+				if (StringUtil::startsWith($cache['info'], $this->prefix)) {
+					APC::delete($cache['info']);
+				}
+			}
+			else if ($regex->match($cache['info'])) {
+				APC::delete($cache['info']);
+			}
+		}
 	}
 }
