@@ -35,10 +35,6 @@ class APC {
 		} else {
 			throw new SystemException('APC support is not enabled.');
 		}
-		
-		if (self::$extension == "apcu" && version_compare(self::$version, '4.0.1', '<')) {
-			throw new SystemException('APCu 4.0.1 and 4.0.0 is not supported.');
-		}
 	}
 	
 	/**
@@ -82,9 +78,9 @@ class APC {
 	 * @param	string	$key
 	 * @return	boolean
 	 */
-	public static function clear_cache ($key = "user") {
+	public static function clear_cache () {
 		$clear_cache = self::$extension."_clear_cache";
-		return $clear_cache($key);
+		return $clear_cache();
 	}
 	
 	
@@ -94,10 +90,10 @@ class APC {
 	 * @param	string	$key
 	 * @return	array
 	 */
-	public static function cache_info ($key = "user") {
+	public static function cache_info () {
 		$info = array();
 		$cache_info = self::$extension."_cache_info";
-		$apcinfo = $cache_info($key);
+		$apcinfo = $cache_info();
 		
 		if (isset($apcinfo['cache_list'])) {
 			$cacheList = $apcinfo['cache_list'];
