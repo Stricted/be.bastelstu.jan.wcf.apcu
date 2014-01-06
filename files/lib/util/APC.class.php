@@ -14,7 +14,7 @@ class APC {
 	 * php extension
 	 * @var	string
 	 */
-	protected static $extension = "";
+	protected static $apcu = false;
 	
 	/**
 	 * APC(u) version
@@ -27,10 +27,9 @@ class APC {
 	 */
 	public static function init () {
 		if (extension_loaded("apcu")) {
-			self::$extension = "apcu";
+			self::$apcu = true;
 			self::$version = phpversion('apcu');
 		} else if (extension_loaded("apc")) {
-			self::$extension = "apc";
 			self::$version = phpversion('apc');
 		} else {
 			throw new SystemException('APC/APCu support is not enabled.');
@@ -41,11 +40,10 @@ class APC {
 	 * deletes a cache item
 	 *
 	 * @param	string	$key
-	 * @return	boolean
 	 */
 	public static function delete ($key) {
-		$delete = self::$extension."_delete";
-		return $delete($key);
+		if (self::$apcu) apcu_delete($key);
+		else apc_delete($key);
 	}
 	
 	/**
@@ -55,8 +53,8 @@ class APC {
 	 * @return	string
 	 */
 	public static function fetch ($key) {
-		$fetch = self::$extension."_fetch";
-		return $fetch($key);
+		if (self::$apcu) return apcu_fetch($key);
+		else return apc_fetch($key);
 	}
 	
 	/**
@@ -64,24 +62,25 @@ class APC {
 	 *
 	 * @param	string	$key
 	 * @param	string	$var
-	 * @param	integer	$ttl
+	 * @param	integer	$ttl <optional>
 	 * @return	boolean
 	 */
-	public static function store ($key, $var, $ttl) {
-		$store = self::$extension."_store";
-		return $store($key, $var, $ttl);
+	public static function store ($key, $var, $ttl = 0) {
+		if (self::$apcu) apcu_store($key, $var, $ttl);
+		else apc_store($key, $var, $ttl);
 	}
 	
 	/**
 	 * get cache items
 	 *
 	 * @param	string	$key
+	 * @param	string	$cache_type <optional>
 	 * @return	array
 	 */
-	public static function cache_info () {
+	public static function cache_info ($cache_type = "") {
 		$info = array();
-		$cache_info = self::$extension."_cache_info";
-		$apcinfo = $cache_info();
+		if (self::$apcu) $apcinfo = apcu_cache_info($cache_type);
+		else $apcinfo = apc_cache_info($cache_type);
 		
 		if (isset($apcinfo['cache_list'])) {
 			$cacheList = $apcinfo['cache_list'];
@@ -91,6 +90,7 @@ class APC {
 			foreach ($cacheList as $cache) {
 				if (isset($cache['key'])) {
 					$cache['info'] = $cache['key'];
+					unset($cache['key']);
 				}
 				
 				if (isset($cache['info'])) {

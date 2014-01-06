@@ -61,11 +61,13 @@ class ApcuCacheSource implements ICacheSource {
 	 * @return	mixed
 	 */
 	public function get($cacheName, $maxLifetime) {
-		if (($data = APC::fetch($this->prefix . $cacheName)) === false) {
-			return null;
+		$data = APC::fetch($this->prefix . $cacheName);
+		
+		if (!empty($data)) {
+			return $data;
 		}
 		
-		return $data;
+		return null;
 	}
 	
 	/**
@@ -102,7 +104,9 @@ class ApcuCacheSource implements ICacheSource {
 	}
 	
 	/**
-	 * @see  \wcf\system\cache\source\ICacheSource::clear()
+	 * remove cache data
+	 *
+	 * @param	string	$pattern	<optional>
 	 */
 	public function removeKeys($pattern = null) {
 		$regex = null;

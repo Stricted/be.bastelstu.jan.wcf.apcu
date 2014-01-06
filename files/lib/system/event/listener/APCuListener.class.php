@@ -56,10 +56,9 @@ class APCuListener implements IEventListener {
 				break;
 			
 			case "wcf\acp\action\UninstallPackageAction":
+				$packageID = 0;
 				if (isset($_POST['packageID']) && !empty($_POST['packageID'])) {
 					$packageID = intval($_POST['packageID']);
-				} else {
-					$packageID = 0;
 				}
 				
 				if ($packageID) {
