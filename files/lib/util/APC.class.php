@@ -33,7 +33,7 @@ class APC {
 			self::$extension = "apc";
 			self::$version = phpversion('apc');
 		} else {
-			throw new SystemException('APC support is not enabled.');
+			throw new SystemException('APC/APCu support is not enabled.');
 		}
 	}
 	
