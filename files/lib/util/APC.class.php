@@ -89,11 +89,11 @@ class APC {
 			usort($cacheList, array("self", "usort"));
 			
 			foreach ($cacheList as $cache) {
-				if (self::$extension == "apcu" && version_compare(self::$version, '4.0.3', '<')) {
-					$apcu = $cache;
-					$apcu['info'] = $cache['key'];
-					$info[] = $apcu;
-				} else {
+				if (isset($cache['key'])) {
+					$cache['info'] = $cache['key'];
+				}
+				
+				if (isset($cache['info'])) {
 					$info[] = $cache;
 				}
 			}
@@ -110,9 +110,10 @@ class APC {
 	 * @return	array
 	 */
 	protected static function usort ($a, $b) {
-		if (self::$extension == "apcu" && version_compare(self::$version, '4.0.3', '<')) {
+		if (isset($a['key']) && isset($b['key'])) {
 			return $a['key'] > $b['key'];
-		} else {
+		}
+		else if (isset($a['info']) && isset($b['info'])) {
 			return $a['info'] > $b['info'];
 		}
 	}
