@@ -42,8 +42,10 @@ class APC {
 	 * @param	string	$key
 	 */
 	public static function delete ($key) {
-		if (self::$apcu) apcu_delete($key);
-		else apc_delete($key);
+		if (self::exists($key)) {
+			if (self::$apcu) apcu_delete($key);
+			else apc_delete($key);
+		}
 	}
 	
 	/**
@@ -53,8 +55,12 @@ class APC {
 	 * @return	string
 	 */
 	public static function fetch ($key) {
-		if (self::$apcu) return apcu_fetch($key);
-		else return apc_fetch($key);
+		if (self::exists($key)) {
+			if (self::$apcu) return apcu_fetch($key);
+			else return apc_fetch($key);
+		}
+		
+		return null;
 	}
 	
 	/**
@@ -66,8 +72,20 @@ class APC {
 	 * @return	boolean
 	 */
 	public static function store ($key, $var, $ttl = 0) {
+		self::delete($key); // remove cache entry if allready exists
 		if (self::$apcu) apcu_store($key, $var, $ttl);
 		else apc_store($key, $var, $ttl);
+	}
+	
+	/**
+	 * Checks if APC/APCu key exists
+	 *
+	 * @param	string	$key
+	 * @return	boolean
+	 */
+	protected static function exists ($key) {
+		if (self::$apcu) return apcu_exists($key);
+		else return apc_exists($key);
 	}
 	
 	/**
