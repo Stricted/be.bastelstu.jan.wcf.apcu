@@ -14,7 +14,7 @@ class APC {
 	 * php extension
 	 * @var	string
 	 */
-	protected static $apcu = false;	
+	protected static $apcu = false;
 	
 	/**
 	 * APC(u) version
