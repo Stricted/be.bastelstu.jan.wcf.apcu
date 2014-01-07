@@ -14,7 +14,7 @@ class APC {
 	 * php extension
 	 * @var	string
 	 */
-	protected static $apcu = false;
+	protected static $apcu = false;	
 	
 	/**
 	 * APC(u) version
@@ -84,14 +84,17 @@ class APC {
 	 * @return	boolean
 	 */
 	protected static function exists ($key) {
-		if (self::$apcu) return apcu_exists($key);
-		else return apc_exists($key);
+		$items = self::cache_info();
+		$cacheItems = array();
+		foreach ($items as $item) {
+			$cacheItems[] = $item['info'];
+		}
+		return in_array($key, $cacheItems);
 	}
 	
 	/**
 	 * get cache items
 	 *
-	 * @param	string	$key
 	 * @param	string	$cache_type <optional>
 	 * @return	array
 	 */
