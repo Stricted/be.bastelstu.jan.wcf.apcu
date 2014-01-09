@@ -57,7 +57,7 @@ class APC {
 	public static function fetch ($key) {
 		if (self::exists($key)) {
 			$cacheTime = self::getCacheTime($key);
-			if ($cacheTime['ttl'] > 0 && (TIME_NOW - $cacheTime['mtime']) > $cacheTime['ttl']) {
+			if ($cacheTime['ttl'] > 0 && (TIME_NOW - $cacheTime['ttl']) > ($cacheTime['mtime'] + $cacheTime['ttl'])) {
 				return null;
 			}
 			
