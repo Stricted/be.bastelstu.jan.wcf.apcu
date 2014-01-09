@@ -52,12 +52,12 @@ class APC {
 	 * fetch a cache item
 	 *
 	 * @param	string	$key
-	 * @param	integer	$maxLifetime	<optional>
 	 * @return	string
 	 */
-	public static function fetch ($key, $maxLifetime = 0) {
+	public static function fetch ($key) {
 		if (self::exists($key)) {
-			if ($maxLifetime > 0 && (TIME_NOW - self::getCacheTime($key)) > $maxLifetime) {
+			$cacheTime = self::getCacheTime($key);
+			if ($cacheTime['ttl'] > 0 && (TIME_NOW - $cacheTime['mtime']) > $cacheTime['ttl']) {
 				return null;
 			}
 			
@@ -108,7 +108,7 @@ class APC {
 		$cacheItems = array();
 		foreach ($items as $item) {
 			if ($item['info'] == $key) {
-				return $item['mtime'];
+				return array("ttl" => $item['ttl'], "mtime" => $item['mtime']);
 			}
 		}
 	}

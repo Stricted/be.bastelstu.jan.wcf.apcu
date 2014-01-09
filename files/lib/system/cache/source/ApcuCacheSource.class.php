@@ -61,7 +61,7 @@ class ApcuCacheSource implements ICacheSource {
 	 * @return	mixed
 	 */
 	public function get($cacheName, $maxLifetime) {
-		$data = APC::fetch($this->prefix . $cacheName, $maxLifetime);
+		$data = APC::fetch($this->prefix . $cacheName);
 		
 		if (!empty($data)) {
 			return $data;
