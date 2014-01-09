@@ -6,3 +6,7 @@
 	<dt>{lang}wcf.acp.cache.data.apcufiles{/lang}</dt>
 	<dd>{#$cacheData.apcufiles}</dd>
 </dl>{/if}
+{if $cacheData.apcuhits|isset}<dl>
+	<dt>{lang}wcf.acp.cache.data.apcuhits{/lang}</dt>
+	<dd>{#$cacheData.apcuhits}</dd>
+</dl>{/if}

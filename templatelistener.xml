@@ -7,6 +7,18 @@
 			<templatename>cacheList</templatename>
 			<eventname>dataFields</eventname>
 			<templatecode><![CDATA[{include file='__apcu'}]]></templatecode>
+		</templatelistener>	
+		<!--<templatelistener name="apcu_columnHeads">
+			<environment>admin</environment>
+			<templatename>cacheList</templatename>
+			<eventname>columnHeads</eventname>
+			<templatecode><![CDATA[{if $files.0.hits|isset}<th class="columnDate">{lang}wcf.acp.cache.list.hits{/lang}</th>{/if}]]></templatecode>
 		</templatelistener>
+		<templatelistener name="apcu_columns">
+			<environment>admin</environment>
+			<templatename>cacheList</templatename>
+			<eventname>columns</eventname>
+			<templatecode><![CDATA[{if $file.hits|isset}<td class="columnDate">{#$file.hits}</td>{/if}]]></templatecode>
+		</templatelistener>-->
 	</import>
 </data>

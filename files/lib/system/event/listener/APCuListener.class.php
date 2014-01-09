@@ -32,6 +32,7 @@ class APCuListener implements IEventListener {
 					$data = array();
 					$eventObj->cacheData['apcufiles'] = 0;
 					$eventObj->cacheData['apcusize'] = 0;
+					$eventObj->cacheData['apcuhits'] = 0;
 					foreach ($cacheList as $cache) {
 						if (!$prefix->match($cache['info'])) continue;
 						
@@ -39,10 +40,12 @@ class APCuListener implements IEventListener {
 						$data['data']['apcu'][] = array(
 							'filename' => $prefix->replace($cache['info'], ''),
 							'filesize' => $cache['mem_size'],
+							/*'hits' => (isset($cache['nhits']) ? $cache['nhits'] : (isset($cache['num_hits']) ? $cache['num_hits'] : "")),*/
 							'mtime' => $cache['mtime']
 						);
 						$eventObj->cacheData['apcufiles']++;
 						$eventObj->cacheData['apcusize'] += $cache['mem_size'];
+						$eventObj->cacheData['apcuhits'] += (isset($cache['nhits']) ? $cache['nhits'] : (isset($cache['num_hits']) ? $cache['num_hits'] : 0));
 					}
 					$eventObj->caches = array_merge($data, $eventObj->caches);
 				}
