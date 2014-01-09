@@ -58,6 +58,7 @@ class APC {
 		if (self::exists($key)) {
 			$cacheTime = self::getCacheTime($key);
 			if ((TIME_NOW - $cacheTime['mtime']) < $cacheTime['ttl']) {
+				self::delete($key);
 				return null;
 			}
 			
