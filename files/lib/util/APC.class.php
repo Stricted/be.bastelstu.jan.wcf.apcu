@@ -52,10 +52,15 @@ class APC {
 	 * fetch a cache item
 	 *
 	 * @param	string	$key
+	 * @param	integer	$maxLifetime	<optional>
 	 * @return	string
 	 */
-	public static function fetch ($key) {
+	public static function fetch ($key, $maxLifetime = 0) {
 		if (self::exists($key)) {
+			if ($maxLifetime > 0 && (TIME_NOW - self::getCacheTime($key)) > $maxLifetime) {
+				return null;
+			}
+			
 			if (self::$apcu) return apcu_fetch($key);
 			else return apc_fetch($key);
 		}
@@ -90,6 +95,22 @@ class APC {
 			$cacheItems[] = $item['info'];
 		}
 		return in_array($key, $cacheItems);
+	}
+	
+	/**
+	 * get cache lifetime
+	 *
+	 * @param	string	$key
+	 * @return	integer
+	 */
+	protected static function getCacheTime ($key) {
+		$items = self::cache_info();
+		$cacheItems = array();
+		foreach ($items as $item) {
+			if ($item['info'] == $key) {
+				return $item['mtime'];
+			}
+		}
 	}
 	
 	/**
