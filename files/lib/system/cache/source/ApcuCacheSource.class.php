@@ -61,13 +61,7 @@ class ApcuCacheSource implements ICacheSource {
 	 * @return	mixed
 	 */
 	public function get($cacheName, $maxLifetime) {
-		$data = APC::fetch($this->prefix . $cacheName);
-		
-		if (!empty($data)) {
-			return $data;
-		}
-		
-		return null;
+		return APC::fetch($this->prefix . $cacheName);
 	}
 	
 	/**
@@ -88,14 +82,7 @@ class ApcuCacheSource implements ICacheSource {
 	 * @return	integer
 	 */
 	protected function getTTL($maxLifetime = 0) {
-		if ($maxLifetime) {
-			// max lifetime is a timestamp, discard (similar to http://www.php.net/manual/en/memcached.expiration.php)
-			if ($maxLifetime > (60 * 60 * 24 * 30)) {
-				$maxLifetime = 0;
-			}
-		}
-		
-		if ($maxLifetime) {
+		if ($maxLifetime && ($maxLifetime <= (60 * 60 * 24 * 30) || $maxLifetime >= TIME_NOW)) {
 			return $maxLifetime;
 		}
 		
