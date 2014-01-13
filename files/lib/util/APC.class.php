@@ -123,7 +123,7 @@ class APC {
 	public static function cache_info ($cache_type = "") {
 		$info = array();
 		if (self::$apcu) $apcinfo = apcu_cache_info($cache_type);
-		else $apcinfo = apc_cache_info(( empty($cache_type) ? "user" : "" ));
+		else $apcinfo = apc_cache_info(( empty($cache_type) ? "user" : $cache_type ));
 		
 		if (isset($apcinfo['cache_list'])) {
 			$cacheList = $apcinfo['cache_list'];
