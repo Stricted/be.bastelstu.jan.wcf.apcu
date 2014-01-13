@@ -90,9 +90,8 @@ class APC {
 	 * @return	boolean
 	 */
 	protected static function exists ($key) {
-		$items = self::cache_info();
 		$cacheItems = array();
-		foreach ($items as $item) {
+		foreach (self::cache_info() as $item) {
 			$cacheItems[] = $item['info'];
 		}
 		return in_array($key, $cacheItems);
@@ -105,12 +104,9 @@ class APC {
 	 * @return	integer
 	 */
 	protected static function getCacheTime ($key) {
-		$items = self::cache_info();
 		$cacheItems = array();
-		foreach ($items as $item) {
-			if ($item['info'] == $key) {
-				return array("ttl" => $item['ttl'], "mtime" => $item['mtime']);
-			}
+		foreach (self::cache_info() as $item) {
+			if ($item['info'] == $key) return array("ttl" => $item['ttl'], "mtime" => $item['mtime']);
 		}
 	}
 	

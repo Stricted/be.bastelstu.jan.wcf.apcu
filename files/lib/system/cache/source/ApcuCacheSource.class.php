@@ -38,12 +38,8 @@ class ApcuCacheSource implements ICacheSource {
 	 * @param	boolean		$useWildcard
 	 */
 	public function flush($cacheName, $useWildcard) {
-		if ($useWildcard) {
-			$this->removeKeys($this->prefix . $cacheName . '(\-[a-f0-9]+)?');
-		}
-		else {
-			APC::delete($this->prefix . $cacheName);
-		}
+		if ($useWildcard) $this->removeKeys($this->prefix . $cacheName . '(\-[a-f0-9]+)?');
+		else APC::delete($this->prefix . $cacheName);
 	}
 	
 	/**
@@ -97,9 +93,7 @@ class ApcuCacheSource implements ICacheSource {
 	 */
 	public function removeKeys($pattern = null) {
 		$regex = null;
-		if ($pattern !== null) {
-			$regex = new Regex('^'.$pattern.'$');
-		}
+		if ($pattern !== null) $regex = new Regex('^'.$pattern.'$');
 		
 		$apcCacheInfo = APC::cache_info();
 		foreach ($apcCacheInfo as $cache) {

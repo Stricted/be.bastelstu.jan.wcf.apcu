@@ -40,7 +40,6 @@ class APCuListener implements IEventListener {
 						$data['data']['apcu'][] = array(
 							'filename' => $prefix->replace($cache['info'], ''),
 							'filesize' => $cache['mem_size'],
-							/*'hits' => (isset($cache['nhits']) ? $cache['nhits'] : (isset($cache['num_hits']) ? $cache['num_hits'] : "")),*/
 							'mtime' => $cache['mtime']
 						);
 						$eventObj->cacheData['apcufiles']++;
@@ -60,9 +59,7 @@ class APCuListener implements IEventListener {
 			
 			case "wcf\acp\action\UninstallPackageAction":
 				$packageID = 0;
-				if (isset($_POST['packageID']) && !empty($_POST['packageID'])) {
-					$packageID = intval($_POST['packageID']);
-				}
+				if (isset($_POST['packageID']) && !empty($_POST['packageID'])) $packageID = intval($_POST['packageID']);
 				
 				if ($packageID) {
 					$sql = "SELECT * FROM wcf".WCF_N."_package where package = ? LIMIT 1";
