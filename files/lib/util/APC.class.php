@@ -132,9 +132,12 @@ class APC {
 					unset($cache['key']);
 				}
 				
-				if (isset($cache['info'])) {
-					$info[] = $cache;
+				if (isset($cache['nhits'])) {
+					$cache['num_hits'] = $cache['nhits'];
+					unset($cache['nhits']);
 				}
+				
+				$info[] = $cache;
 			}
 		}
 		

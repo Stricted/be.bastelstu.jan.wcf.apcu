@@ -44,7 +44,7 @@ class APCuListener implements IEventListener {
 						);
 						$eventObj->cacheData['apcufiles']++;
 						$eventObj->cacheData['apcusize'] += $cache['mem_size'];
-						$eventObj->cacheData['apcuhits'] += (isset($cache['nhits']) ? $cache['nhits'] : (isset($cache['num_hits']) ? $cache['num_hits'] : 0));
+						$eventObj->cacheData['apcuhits'] += $cache['num_hits'];
 					}
 					$eventObj->caches = array_merge($data, $eventObj->caches);
 				}
