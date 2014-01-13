@@ -26,14 +26,12 @@ class APCuListener implements IEventListener {
 					// set version
 					$eventObj->cacheData['version'] = APC::$version;
 					
-					$cacheList = APC::cache_info();
-					
 					$prefix = new Regex('^WCF_'.substr(sha1(WCF_DIR), 0, 10) . '_');
 					$data = array();
 					$eventObj->cacheData['apcufiles'] = 0;
 					$eventObj->cacheData['apcusize'] = 0;
 					$eventObj->cacheData['apcuhits'] = 0;
-					foreach ($cacheList as $cache) {
+					foreach (APC::cache_info() as $cache) {
 						if (!$prefix->match($cache['info'])) continue;
 						
 						// get additional cache information

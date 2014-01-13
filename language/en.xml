@@ -6,6 +6,5 @@
 		<item name="wcf.acp.cache.data.apcusize"><![CDATA[APC(u) Size]]></item>
 		<item name="wcf.acp.cache.data.apcufiles"><![CDATA[APC(u) Files]]></item>
 		<item name="wcf.acp.cache.data.apcuhits"><![CDATA[APC(u) Hits]]></item>
-		<!--<item name="wcf.acp.cache.list.hits"><![CDATA[Hits]]></item>-->
 	</category>
 </language>
