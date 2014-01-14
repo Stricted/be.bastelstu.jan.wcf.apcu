@@ -116,10 +116,10 @@ class APC {
 	 * @param	string	$cache_type <optional>
 	 * @return	array
 	 */
-	public static function cache_info ($cache_type = "") {
+	public static function cache_info ($cache_type = "user") {
 		$info = array();
-		if (self::$apcu) $apcinfo = apcu_cache_info($cache_type);
-		else $apcinfo = apc_cache_info(( empty($cache_type) ? "user" : $cache_type ));
+		if (self::$apcu) $apcinfo = apcu_cache_info(($cache_type = "user" ? "" : $cache_type)); // small workaround for APCu below version 4.0.2
+		else $apcinfo = apc_cache_info($cache_type); // APC need cache_type = 'user'
 		
 		if (isset($apcinfo['cache_list'])) {
 			$cacheList = $apcinfo['cache_list'];
