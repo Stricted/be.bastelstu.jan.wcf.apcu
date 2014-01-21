@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\event\listener;
+use wcf\system\cache\CacheHandler;
 use wcf\system\event\IEventListener;
 use wcf\system\exception\SystemException;
 use wcf\system\Regex;
@@ -19,6 +20,9 @@ class APCuListener implements IEventListener {
 	 */
 	public function execute($eventObj, $className, $eventName) {
 		switch ($className) {
+			case "wcf\acp\page\IndexPage":
+				$eventObj->server['cache'] = get_class(CacheHandler::getInstance()->getCacheSource());
+				break;
 			case "wcf\acp\page\CacheListPage":
 				if ($eventObj->cacheData['source'] == 'wcf\system\cache\source\ApcuCacheSource') {
 					APC::init();

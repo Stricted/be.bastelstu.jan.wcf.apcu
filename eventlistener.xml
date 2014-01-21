@@ -20,6 +20,12 @@
 			<environment>admin</environment>
 			<listenerclassname><![CDATA[wcf\system\event\listener\APCuListener]]></listenerclassname>
 		</eventlistener>
+		<eventlistener>
+			<eventclassname><![CDATA[wcf\acp\page\IndexPage]]></eventclassname>
+			<eventname>assignVariables</eventname>
+			<environment>admin</environment>
+			<listenerclassname><![CDATA[wcf\system\event\listener\APCuListener]]></listenerclassname>
+		</eventlistener>
 		<!-- /admin -->
 	</import>
 </data>

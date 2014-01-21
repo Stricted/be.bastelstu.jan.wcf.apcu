@@ -23,7 +23,6 @@
 		<instruction type="eventListener">eventlistener.xml</instruction>
 		<instruction type="templateListener">templatelistener.xml</instruction>
 		<instruction type="language">language/*.xml</instruction>
-		<instruction type="script">acp/install_apcu_1.0.6.php</instruction>
 	</instructions>
 	
 	<instructions type="update" fromversion="1.0.5 pl 1">

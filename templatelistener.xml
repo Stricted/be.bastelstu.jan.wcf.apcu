@@ -8,5 +8,11 @@
 			<eventname>dataFields</eventname>
 			<templatecode><![CDATA[{include file='__apcu'}]]></templatecode>
 		</templatelistener>	
+		<templatelistener name="apcu_serverFields">
+			<environment>admin</environment>
+			<templatename>index</templatename>
+			<eventname>serverFields</eventname>
+			<templatecode><![CDATA[{include file='__iapcu'}]]></templatecode>
+		</templatelistener>	
 	</import>
 </data>
