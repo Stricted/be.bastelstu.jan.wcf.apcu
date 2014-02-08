@@ -3,7 +3,7 @@
 	<packageinformation>
 		<packagename>Alternative PHP Cache (APC/APCu)</packagename>
 		<packagedescription></packagedescription>
-		<version>2.0.0</version>
+		<version>2.0.0 pl 1</version>
 		<date>2014-02-08</date>
 		<license><![CDATA[GNU LGPL <https://www.gnu.org/licenses/lgpl.html>]]></license>
 	</packageinformation>
@@ -20,14 +20,12 @@
 	<instructions type="install">
 		<instruction type="file">files.tar</instruction>
 		<instruction type="eventListener">eventlistener.xml</instruction>
-		<instruction type="templateListener">templatelistener.xml</instruction>
 		<instruction type="language">language/*.xml</instruction>
 	</instructions>
 	
-	<instructions type="update" fromversion="1.0.5 pl 1">
+	<instructions type="update" fromversion="2.0.0">
 		<instruction type="file">files.tar</instruction>
 		<instruction type="eventListener">eventlistener.xml</instruction>
-		<instruction type="templateListener">templatelistener.xml</instruction>
 		<instruction type="language">language/*.xml</instruction>
 	</instructions>
 </package>

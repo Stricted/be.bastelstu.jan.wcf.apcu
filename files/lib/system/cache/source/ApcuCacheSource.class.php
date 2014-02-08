@@ -113,7 +113,7 @@ class ApcuCacheSource implements ICacheSource {
 				}
 			}
 			else if ($regex->match($cache['info'])) {
-				vdelete($cache['info']);
+				$this->apc->delete($cache['info']);
 			}
 		}
 	}
