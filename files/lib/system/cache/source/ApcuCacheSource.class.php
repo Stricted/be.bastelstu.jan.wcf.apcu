@@ -16,6 +16,12 @@ use wcf\util\StringUtil;
  */
 class ApcuCacheSource implements ICacheSource {
 	/**
+	 * apc object
+	 * @var \wcf\util\APC
+	 */
+	protected $apc = null;
+	
+	/**
 	 * key prefix
 	 * @var	string
 	 */
@@ -25,7 +31,7 @@ class ApcuCacheSource implements ICacheSource {
 	 * Creates a new ApcCacheSource object.
 	 */
 	public function __construct() {
-		APC::init();
+		$this->apc = APC::getInstance();
 		
 		// set variable prefix to prevent collision
 		$this->prefix = 'WCF_'.substr(sha1(WCF_DIR), 0, 10) . '_';
@@ -38,8 +44,12 @@ class ApcuCacheSource implements ICacheSource {
 	 * @param	boolean		$useWildcard
 	 */
 	public function flush($cacheName, $useWildcard) {
-		if ($useWildcard) $this->removeKeys($this->prefix . $cacheName . '(\-[a-f0-9]+)?');
-		else APC::delete($this->prefix . $cacheName);
+		if ($useWildcard) {
+			$this->removeKeys($this->prefix . $cacheName . '(\-[a-f0-9]+)?');
+		}
+		else {
+			$this->apc->delete($this->prefix . $cacheName);
+		}
 	}
 	
 	/**
@@ -57,7 +67,7 @@ class ApcuCacheSource implements ICacheSource {
 	 * @return	mixed
 	 */
 	public function get($cacheName, $maxLifetime) {
-		return APC::fetch($this->prefix . $cacheName);
+		return $this->apc->fetch($this->prefix . $cacheName);
 	}
 	
 	/**
@@ -68,7 +78,7 @@ class ApcuCacheSource implements ICacheSource {
 	 * @param	integer		$maxLifetime
 	 */
 	public function set($cacheName, $value, $maxLifetime) {
-		APC::store($this->prefix . $cacheName, $value, $this->getTTL($maxLifetime));
+		$this->apc->store($this->prefix . $cacheName, $value, $this->getTTL($maxLifetime));
 	}
 	
 	/**
@@ -95,15 +105,15 @@ class ApcuCacheSource implements ICacheSource {
 		$regex = null;
 		if ($pattern !== null) $regex = new Regex('^'.$pattern.'$');
 		
-		$apcCacheInfo = APC::cache_info();
+		$apcCacheInfo = $this->apc->cache_info();
 		foreach ($apcCacheInfo as $cache) {
 			if ($regex === null) {
 				if (StringUtil::startsWith($cache['info'], $this->prefix)) {
-					APC::delete($cache['info']);
+					$this->apc->delete($cache['info']);
 				}
 			}
 			else if ($regex->match($cache['info'])) {
-				APC::delete($cache['info']);
+				vdelete($cache['info']);
 			}
 		}
 	}

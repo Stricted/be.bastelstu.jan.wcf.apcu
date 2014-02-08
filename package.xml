@@ -3,8 +3,8 @@
 	<packageinformation>
 		<packagename>Alternative PHP Cache (APC/APCu)</packagename>
 		<packagedescription></packagedescription>
-		<version>1.0.6</version>
-		<date>2014-01-13</date>
+		<version>2.0.0</version>
+		<date>2014-02-08</date>
 		<license><![CDATA[GNU LGPL <https://www.gnu.org/licenses/lgpl.html>]]></license>
 	</packageinformation>
 	

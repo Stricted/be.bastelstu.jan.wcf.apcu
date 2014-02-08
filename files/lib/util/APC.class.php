@@ -1,6 +1,7 @@
 <?php
 namespace wcf\util;
 use wcf\system\exception\SystemException;
+use wcf\system\SingletonFactory;
 
 /**
  * @author      Jan Altensen (Stricted)
@@ -9,7 +10,7 @@ use wcf\system\exception\SystemException;
  * @package     be.bastelstu.jan.wcf.apcu
  * @category    Community Framework
  */
-class APC {
+class APC extends SingletonFactory {
 	/**
 	 * php extension
 	 * @var	string
@@ -25,12 +26,12 @@ class APC {
 	/**
 	 * init APC class
 	 */
-	public static function init () {
+	private function init () {
 		if (extension_loaded("apcu")) {
-			self::$apcu = true;
-			self::$version = phpversion('apcu');
+			$this->apcu = true;
+			$this->version = phpversion('apcu');
 		} else if (extension_loaded("apc")) {
-			self::$version = phpversion('apc');
+			$this->version = phpversion('apc');
 		} else {
 			throw new SystemException('APC/APCu support is not enabled.');
 		}
@@ -40,11 +41,16 @@ class APC {
 	 * deletes a cache item
 	 *
 	 * @param	string	$key
+	 * @return	boolean
 	 */
 	public static function delete ($key) {
-		if (self::exists($key)) {
-			if (self::$apcu) apcu_delete($key);
-			else apc_delete($key);
+		if ($this->exists($key)) {
+			if ($this->apcu) {
+				return apcu_delete($key);
+			}
+			else {
+				return apc_delete($key);
+			}
 		}
 	}
 	
@@ -55,15 +61,19 @@ class APC {
 	 * @return	string
 	 */
 	public static function fetch ($key) {
-		if (self::exists($key)) {
-			$cacheTime = self::getCacheTime($key);
+		if ($this->exists($key)) {
+			$cacheTime = $this->getCacheTime($key);
 			if ($cacheTime['ttl'] > 0 && (TIME_NOW - $cacheTime['mtime']) > $cacheTime['ttl']) {
-				self::delete($key);
+				$this->delete($key);
 				return null;
 			}
 			
-			if (self::$apcu) return apcu_fetch($key);
-			else return apc_fetch($key);
+			if ($this->apcu) {
+				return apcu_fetch($key);
+			}
+			else {
+				return apc_fetch($key);
+			}
 		}
 		
 		return null;
@@ -78,9 +88,14 @@ class APC {
 	 * @return	boolean
 	 */
 	public static function store ($key, $var, $ttl = 0) {
-		self::delete($key); // remove cache entry if allready exists
-		if (self::$apcu) apcu_store($key, $var, $ttl);
-		else apc_store($key, $var, $ttl);
+		$this->delete($key); // remove cache entry if allready exists
+		
+		if ($this->apcu) {
+			apcu_store($key, $var, $ttl);
+		}
+		else {
+			apc_store($key, $var, $ttl);
+		}
 	}
 	
 	/**
@@ -91,7 +106,7 @@ class APC {
 	 */
 	protected static function exists ($key) {
 		$cacheItems = array();
-		foreach (self::cache_info() as $item) {
+		foreach ($this->cache_info() as $item) {
 			$cacheItems[] = $item['info'];
 		}
 		return in_array($key, $cacheItems);
@@ -101,40 +116,74 @@ class APC {
 	 * get cache lifetime
 	 *
 	 * @param	string	$key
-	 * @return	integer
+	 * @return	array
 	 */
 	protected static function getCacheTime ($key) {
 		$cacheItems = array();
-		foreach (self::cache_info() as $item) {
-			if ($item['info'] == $key) return array("ttl" => $item['ttl'], "mtime" => $item['mtime']);
+		foreach ($this->cache_info() as $item) {
+			if ($item['info'] == $key) {
+				return array(
+					"ttl" => $item['ttl'],
+					"mtime" => $item['mtime']
+					);
+			}
 		}
 	}
-	
+		
 	/**
 	 * get cache items
 	 *
 	 * @param	string	$cache_type <optional>
 	 * @return	array
 	 */
-	public static function cache_info ($cache_type = "user") {
+	public static function cache_info ($cache_type = "") {
 		$info = array();
-		if (self::$apcu) $apcinfo = apcu_cache_info(($cache_type = "user" ? "" : $cache_type)); // small workaround for APCu below version 4.0.2
-		else $apcinfo = apc_cache_info($cache_type); // APC need cache_type = 'user'
+		
+		if ($this->apcu) {
+			$apcinfo = apcu_cache_info($cache_type);
+		}
+		else {
+			// APC need cache_type = 'user'
+			if ($cache_type == "") $cache_type = "user";
+			
+			$apcinfo = apc_cache_info($cache_type);
+		}
 		
 		if (isset($apcinfo['cache_list'])) {
 			$cacheList = $apcinfo['cache_list'];
 			
-			usort($cacheList, array("self", "usort"));
+			usort($cacheList, array($this, "usort"));
 			
 			foreach ($cacheList as $cache) {
+				// make APCu output compatible with APC
+				
 				if (isset($cache['key'])) {
 					$cache['info'] = $cache['key'];
 					unset($cache['key']);
 				}
 				
+				if (!isset($cache['type'])) {
+					$cache['type'] = 'user';
+				}
+				
 				if (isset($cache['nhits'])) {
 					$cache['num_hits'] = $cache['nhits'];
 					unset($cache['nhits']);
+				}
+				
+				if (isset($cache['ctime'])) {
+					$cache['creation_time'] = $cache['ctime'];
+					unset($cache['ctime']);
+				}
+				
+				if (isset($cache['dtime'])) {
+					$cache['deletion_time'] = $cache['dtime'];
+					unset($cache['dtime']);
+				}
+				
+				if (isset($cache['atime'])) {
+					$cache['access_time'] = $cache['atime'];
+					unset($cache['atime']);
 				}
 				
 				$info[] = $cache;

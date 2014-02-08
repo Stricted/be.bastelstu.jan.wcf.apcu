@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/maelstrom/templatelistener.xsd">
-	<import>
-		<!-- admin -->
+	<delete>
 		<templatelistener name="apcu_dataFields">
 			<environment>admin</environment>
 			<templatename>cacheList</templatename>
 			<eventname>dataFields</eventname>
-			<templatecode><![CDATA[{include file='__apcu'}]]></templatecode>
-		</templatelistener>	
-		<templatelistener name="apcu_serverFields">
-			<environment>admin</environment>
-			<templatename>index</templatename>
-			<eventname>serverFields</eventname>
-			<templatecode><![CDATA[{include file='__iapcu'}]]></templatecode>
-		</templatelistener>	
-	</import>
+		</templatelistener>
+	</delete>
 </data>

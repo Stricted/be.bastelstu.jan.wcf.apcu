@@ -25,17 +25,14 @@ class APCuListener implements IEventListener {
 				break;
 			case "wcf\acp\page\CacheListPage":
 				if ($eventObj->cacheData['source'] == 'wcf\system\cache\source\ApcuCacheSource') {
-					APC::init();
+					$apc = APC::getInstance();
 					
 					// set version
-					$eventObj->cacheData['version'] = APC::$version;
+					$eventObj->cacheData['version'] = $apc->version;
 					
 					$prefix = new Regex('^WCF_'.substr(sha1(WCF_DIR), 0, 10) . '_');
 					$data = array();
-					$eventObj->cacheData['apcufiles'] = 0;
-					$eventObj->cacheData['apcusize'] = 0;
-					$eventObj->cacheData['apcuhits'] = 0;
-					foreach (APC::cache_info() as $cache) {
+					foreach ($apc->cache_info() as $cache) {
 						if (!$prefix->match($cache['info'])) continue;
 						
 						// get additional cache information
@@ -44,9 +41,8 @@ class APCuListener implements IEventListener {
 							'filesize' => $cache['mem_size'],
 							'mtime' => $cache['mtime']
 						);
-						$eventObj->cacheData['apcufiles']++;
-						$eventObj->cacheData['apcusize'] += $cache['mem_size'];
-						$eventObj->cacheData['apcuhits'] += $cache['num_hits'];
+						$eventObj->cacheData['files']++;
+						$eventObj->cacheData['size'] += $cache['mem_size'];
 					}
 					$eventObj->caches = array_merge($data, $eventObj->caches);
 				}
