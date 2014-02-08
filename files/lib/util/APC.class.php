@@ -15,18 +15,18 @@ class APC extends SingletonFactory {
 	 * php extension
 	 * @var	string
 	 */
-	protected static $apcu = false;
+	protected $apcu = false;
 	
 	/**
 	 * APC(u) version
 	 * @var integer
 	 */
-	public static $version = 0;
+	public $version = 0;
 	
 	/**
 	 * init APC class
 	 */
-	private function init () {
+	protected function init () {
 		if (extension_loaded("apcu")) {
 			$this->apcu = true;
 			$this->version = phpversion('apcu');
@@ -43,7 +43,7 @@ class APC extends SingletonFactory {
 	 * @param	string	$key
 	 * @return	boolean
 	 */
-	public static function delete ($key) {
+	public function delete ($key) {
 		if ($this->exists($key)) {
 			if ($this->apcu) {
 				return apcu_delete($key);
@@ -60,7 +60,7 @@ class APC extends SingletonFactory {
 	 * @param	string	$key
 	 * @return	string
 	 */
-	public static function fetch ($key) {
+	public function fetch ($key) {
 		if ($this->exists($key)) {
 			$cacheTime = $this->getCacheTime($key);
 			if ($cacheTime['ttl'] > 0 && (TIME_NOW - $cacheTime['mtime']) > $cacheTime['ttl']) {
@@ -87,7 +87,7 @@ class APC extends SingletonFactory {
 	 * @param	integer	$ttl <optional>
 	 * @return	boolean
 	 */
-	public static function store ($key, $var, $ttl = 0) {
+	public function store ($key, $var, $ttl = 0) {
 		$this->delete($key); // remove cache entry if allready exists
 		
 		if ($this->apcu) {
@@ -104,7 +104,7 @@ class APC extends SingletonFactory {
 	 * @param	string	$key
 	 * @return	boolean
 	 */
-	protected static function exists ($key) {
+	protected function exists ($key) {
 		$cacheItems = array();
 		foreach ($this->cache_info() as $item) {
 			$cacheItems[] = $item['info'];
@@ -118,7 +118,7 @@ class APC extends SingletonFactory {
 	 * @param	string	$key
 	 * @return	array
 	 */
-	protected static function getCacheTime ($key) {
+	protected function getCacheTime ($key) {
 		$cacheItems = array();
 		foreach ($this->cache_info() as $item) {
 			if ($item['info'] == $key) {
@@ -136,7 +136,7 @@ class APC extends SingletonFactory {
 	 * @param	string	$cache_type <optional>
 	 * @return	array
 	 */
-	public static function cache_info ($cache_type = "") {
+	public function cache_info ($cache_type = "") {
 		$info = array();
 		
 		if ($this->apcu) {
@@ -200,7 +200,7 @@ class APC extends SingletonFactory {
 	 * @param	array	$b
 	 * @return	array
 	 */
-	protected static function usort ($a, $b) {
+	protected function usort ($a, $b) {
 		if (isset($a['key']) && isset($b['key'])) {
 			return $a['key'] > $b['key'];
 		}
