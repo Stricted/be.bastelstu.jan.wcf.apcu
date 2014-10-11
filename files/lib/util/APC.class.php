@@ -186,6 +186,11 @@ class APC extends SingletonFactory {
 					unset($cache['atime']);
 				}
 				
+				if (isset($cache['modification_time'])) {
+					$cache['mtime'] = $cache['modification_time'];
+					unset($cache['modification_time']);
+				}
+				
 				$info[] = $cache;
 			}
 		}
