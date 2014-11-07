@@ -34,7 +34,7 @@ class ApcuCacheSource implements ICacheSource {
 		$this->apc = APC::getInstance();
 		
 		// set variable prefix to prevent collision
-		$this->prefix = 'WCF_'.substr(sha1(WCF_DIR), 0, 10) . '_';
+		$this->prefix = WCF_UUID.'_';
 	}
 	
 	/**
