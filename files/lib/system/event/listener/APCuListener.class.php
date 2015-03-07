@@ -1,7 +1,7 @@
 <?php
 namespace wcf\system\event\listener;
 use wcf\system\cache\CacheHandler;
-use wcf\system\event\IEventListener;
+use wcf\system\event\listener\IParameterizedEventListener;
 use wcf\system\exception\SystemException;
 use wcf\system\Regex;
 use wcf\system\WCF;
@@ -14,11 +14,11 @@ use wcf\util\APC;
  * @package     be.bastelstu.jan.wcf.apcu
  * @category    Community Framework
  */
-class APCuListener implements IEventListener {
+class APCuListener implements IParameterizedEventListener {
 	/**
 	 * @see \wcf\system\event\IEventListener::execute()
 	 */
-	public function execute($eventObj, $className, $eventName) {
+	public function execute($eventObj, $className, $eventName, array &$parameters) {
 		switch ($className) {
 			case "wcf\acp\page\IndexPage":
 				$eventObj->server['cache'] = get_class(CacheHandler::getInstance()->getCacheSource());
@@ -30,7 +30,7 @@ class APCuListener implements IEventListener {
 					// set version
 					$eventObj->cacheData['version'] = $apc->version;
 					
-					$prefix = new Regex('^WCF_'.substr(sha1(WCF_DIR), 0, 10) . '_');
+					$prefix = new Regex('^'.WCF_UUID.'_');
 					$data = array();
 					foreach ($apc->cache_info() as $cache) {
 						if (!$prefix->match($cache['info'])) continue;
@@ -50,9 +50,7 @@ class APCuListener implements IEventListener {
 			
 			case "wcf\system\option\OptionHandler":
 				$eventObj->cachedOptions['cache_source_type']->modifySelectOptions($eventObj->cachedOptions['cache_source_type']->selectOptions . "\napcu:wcf.acp.option.cache_source_type.apcu");
-				
-				/* dirty but i need wait for pull request https://github.com/WoltLab/WCF/pull/1630 */
-				$eventObj->cachedOptions['cache_source_type']->enableOptions = $eventObj->cachedOptions['cache_source_type']->enableOptions . "\napcu:!cache_source_memcached_host";
+				$eventObj->cachedOptions['cache_source_type']->modifyEnableOptions($eventObj->cachedOptions['cache_source_type']->enableOptions . "\napcu:!cache_source_memcached_host";);
 				break;
 			
 			case "wcf\acp\action\UninstallPackageAction":
