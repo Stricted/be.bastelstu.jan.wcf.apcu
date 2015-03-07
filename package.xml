@@ -22,4 +22,10 @@
 		<instruction type="eventListener">eventlistener.xml</instruction>
 		<instruction type="language">language/*.xml</instruction>
 	</instructions>
+	
+	<instructions type="update" fromversion="2.0.0 pl 3">
+		<instruction type="file">files.tar</instruction>
+		<instruction type="eventListener">eventlistener.xml</instruction>
+		<instruction type="language">language/*.xml</instruction>
+	</instructions>
 </package>
