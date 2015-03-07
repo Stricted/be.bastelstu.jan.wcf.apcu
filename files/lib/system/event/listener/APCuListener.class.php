@@ -50,7 +50,7 @@ class APCuListener implements IParameterizedEventListener {
 			
 			case "wcf\system\option\OptionHandler":
 				$eventObj->cachedOptions['cache_source_type']->modifySelectOptions($eventObj->cachedOptions['cache_source_type']->selectOptions . "\napcu:wcf.acp.option.cache_source_type.apcu");
-				$eventObj->cachedOptions['cache_source_type']->modifyEnableOptions($eventObj->cachedOptions['cache_source_type']->enableOptions . "\napcu:!cache_source_memcached_host";);
+				$eventObj->cachedOptions['cache_source_type']->modifyEnableOptions($eventObj->cachedOptions['cache_source_type']->enableOptions . "\napcu:!cache_source_memcached_host");
 				break;
 			
 			case "wcf\acp\action\UninstallPackageAction":
