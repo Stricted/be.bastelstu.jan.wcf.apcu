@@ -157,6 +157,11 @@ class APC extends SingletonFactory {
 			foreach ($cacheList as $cache) {
 				// make APCu output compatible with APC
 				
+				if (isset($cache['entry_name'])) {
+					$cache['info'] = $cache['entry_name'];
+					unset($cache['entry_name']);
+				}
+				
 				if (isset($cache['key'])) {
 					$cache['info'] = $cache['key'];
 					unset($cache['key']);
@@ -189,6 +194,12 @@ class APC extends SingletonFactory {
 				if (isset($cache['modification_time'])) {
 					$cache['mtime'] = $cache['modification_time'];
 					unset($cache['modification_time']);
+				}
+				
+				// fix for hhvm
+				if (!isset($cache['modification_time']) && !isset($cache['mtime'])) {
+					$cache['mtime'] = TIME_NOW;
+					$cache['ttl'] = TIME_NOW + $cache['ttl'];
 				}
 				
 				$info[] = $cache;
